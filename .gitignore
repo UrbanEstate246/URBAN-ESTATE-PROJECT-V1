@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment
+.env
+.env.local
+.env.production
+.env*.local
+
+# Build
+.next/
+out/
+.netlify/
+.supabase/
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# Testing
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp

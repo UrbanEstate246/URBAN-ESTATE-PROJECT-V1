@@ -1,0 +1,24 @@
+@tailwind base; 
+@tailwind components; 
+@tailwind utilities; 
+
+@layer base { 
+  * { 
+    @apply border-subtle-border; 
+  } 
+  
+  body { 
+    @apply bg-institutional-white text-deep-charcoal; 
+    font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+  } 
+
+  h1, h2, h3, h4, h5, h6 { 
+    @apply text-deep-charcoal font-semibold; 
+  } 
+} 
+
+@layer utilities { 
+  .text-balance { 
+    text-wrap: balance; 
+  } 
+} 

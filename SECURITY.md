@@ -450,3 +450,35 @@ Before deploying:
 - Use production keys in development
 - Expose internal errors
 - Allow SQL injection vectors
+
+---
+
+## NETLIFY BUILD CONFIGURATION LOCK
+
+**Protected File:** `netlify.toml`  
+**Policy:** Do not modify this configuration without explicit owner approval.
+
+**Required configuration (must match exactly):**
+```toml
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = ".next"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+```
+
+**Rationale:**
+- Prevents 404/route breakage by ensuring Next.js routing and server functions are correctly generated.
+- Guarantees dependencies install and build inside `frontend`, avoiding missing `next` binary issues.
+- Maintains consistent production behavior across deploys.
+
+**Change control:**
+- Changes require owner approval and a security review.
+- Use a dedicated PR titled: `Change request: netlify.toml`.
+- Include deploy logs and rollback plan.

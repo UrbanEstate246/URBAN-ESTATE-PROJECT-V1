@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import Container from '@/components/layout/Container'
 import Button from '@/components/ui/Button'
+import ImageUpload from '@/components/property/ImageUpload'
 import { KENYAN_COUNTIES, AMENITIES } from '@/lib/utils/constants'
 import { ShieldCheck, CheckCircle2, ArrowRight, Building, Plus } from 'lucide-react'
 
@@ -21,6 +22,7 @@ export default function ListPropertyPage() {
     bathrooms: '2',
     description: '',
     selectedAmenities: [] as string[],
+    images: [] as string[],
   })
 
   const toggleAmenity = (amenity: string) => {
@@ -256,6 +258,19 @@ export default function ListPropertyPage() {
                     )
                   })}
                 </div>
+              </div>
+
+              {/* Property Photos */}
+              <div className="pt-4 border-t border-subtle-border">
+                <h2 className="text-lg font-semibold text-deep-charcoal mb-2">Property Photos</h2>
+                <p className="text-xs text-gray-500 mb-4">
+                  Upload clear photos of the property. The first photo will be used as the cover thumbnail.
+                </p>
+                <ImageUpload
+                  images={formData.images}
+                  onChange={(newImages) => setFormData({ ...formData, images: newImages })}
+                  maxImages={8}
+                />
               </div>
 
               {/* Description */}

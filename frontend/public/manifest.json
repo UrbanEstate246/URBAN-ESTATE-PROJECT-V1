@@ -1,0 +1,23 @@
+{
+  "name": "UrbanEstate - Verified Kenyan Real Estate",
+  "short_name": "UrbanEstate",
+  "description": "Direct, verified Kenyan real estate platform connecting tenants and buyers directly to verified landlords.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8F9FA",
+  "theme_color": "#0B1F33",
+  "icons": [
+    {
+      "src": "/logo/app-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

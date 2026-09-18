@@ -1,3 +1,4 @@
+
 import { Handler, HandlerEvent } from '@netlify/functions'
 import crypto from 'crypto'
 import { corsHeaders, successResponse, errorResponse } from './_shared/utils'

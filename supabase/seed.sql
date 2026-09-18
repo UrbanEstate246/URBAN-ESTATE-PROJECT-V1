@@ -136,3 +136,121 @@ INSERT INTO public.properties (
   38
 )
 ON CONFLICT (id) DO NOTHING;
+
+-- Insert sample property images
+INSERT INTO public.property_images (
+  id,
+  property_id,
+  cloudinary_public_id,
+  cloudinary_url,
+  thumbnail_url,
+  display_order
+) VALUES
+(
+  'b1010000-0000-0000-0000-000000000101',
+  'a1010000-0000-0000-0000-000000000101',
+  'urbanestate/kilimani-1',
+  'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80',
+  'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=400&q=80',
+  1
+),
+(
+  'b1010000-0000-0000-0000-000000000102',
+  'a1010000-0000-0000-0000-000000000101',
+  'urbanestate/kilimani-2',
+  'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1000&q=80',
+  'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=400&q=80',
+  2
+),
+(
+  'b1020000-0000-0000-0000-000000000101',
+  'a1020000-0000-0000-0000-000000000102',
+  'urbanestate/lavington-1',
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80',
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=400&q=80',
+  1
+),
+(
+  'b1030000-0000-0000-0000-000000000101',
+  'a1030000-0000-0000-0000-000000000103',
+  'urbanestate/westlands-1',
+  'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=80',
+  'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=400&q=80',
+  1
+),
+(
+  'b1040000-0000-0000-0000-000000000101',
+  'a1040000-0000-0000-0000-000000000104',
+  'urbanestate/ruaka-1',
+  'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1000&q=80',
+  'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=400&q=80',
+  1
+),
+(
+  'b1050000-0000-0000-0000-000000000101',
+  'a1050000-0000-0000-0000-000000000105',
+  'urbanestate/ruiru-1',
+  'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80',
+  'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=400&q=80',
+  1
+),
+(
+  'b1060000-0000-0000-0000-000000000101',
+  'a1060000-0000-0000-0000-000000000106',
+  'urbanestate/nyali-1',
+  'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1000&q=80',
+  'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=400&q=80',
+  1
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- Insert sample building units
+INSERT INTO public.units (
+  id,
+  property_id,
+  unit_number,
+  rent,
+  status
+) VALUES
+(
+  'c1010000-0000-0000-0000-000000000101',
+  'a1010000-0000-0000-0000-000000000101',
+  'A-402',
+  65000.00,
+  'vacant'
+),
+(
+  'c1010000-0000-0000-0000-000000000102',
+  'a1010000-0000-0000-0000-000000000101',
+  'B-101',
+  65000.00,
+  'occupied'
+),
+(
+  'c1030000-0000-0000-0000-000000000101',
+  'a1030000-0000-0000-0000-000000000103',
+  'Penthouse 8',
+  75000.00,
+  'vacant'
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- Insert sample land verification registry record
+INSERT INTO public.land_verification (
+  id,
+  property_id,
+  parcel_number,
+  verification_source,
+  verification_status,
+  verified_at
+) VALUES
+(
+  'd1050000-0000-0000-0000-000000000101',
+  'a1050000-0000-0000-0000-000000000105',
+  'RUIRU/BLOCK-4/912',
+  'gok',
+  'verified',
+  NOW()
+)
+ON CONFLICT (id) DO NOTHING;
+

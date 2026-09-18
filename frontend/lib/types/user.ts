@@ -9,5 +9,7 @@ export type UserStatus = 'active' | 'suspended' | 'deleted'
 
 export interface UserProfile extends User { 
   email?: string 
+  full_name?: string | null
+  avatar_url?: string | null
 } 
 

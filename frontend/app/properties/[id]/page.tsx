@@ -8,6 +8,7 @@ import Container from '@/components/layout/Container'
 import VerificationBadge from '@/components/property/VerificationBadge'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
+import ReportModal from '@/components/property/ReportModal'
 import { SAMPLE_PROPERTIES } from '@/lib/data/sampleProperties'
 import { formatPrice } from '@/lib/utils/formatters'
 import {
@@ -21,6 +22,7 @@ import {
   Mail,
   Share2,
   Calendar,
+  Flag,
 } from 'lucide-react'
 
 export default function PropertyDetailsPage() {
@@ -29,6 +31,7 @@ export default function PropertyDetailsPage() {
 
   const property = SAMPLE_PROPERTIES.find((p) => p.id === propertyId)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [isReportOpen, setIsReportOpen] = useState(false)
 
   if (!property) {
     return (
@@ -252,9 +255,25 @@ export default function PropertyDetailsPage() {
                   <li>Report suspicious listings directly to admin.</li>
                 </ul>
               </div>
+
+              <button
+                type="button"
+                onClick={() => setIsReportOpen(true)}
+                className="w-full text-center text-xs text-gray-400 hover:text-red-600 transition-colors flex items-center justify-center gap-1.5 pt-3 border-t border-subtle-border mt-3"
+              >
+                <Flag className="w-3.5 h-3.5" />
+                Report this listing
+              </button>
             </div>
           </div>
         </div>
+
+        <ReportModal
+          isOpen={isReportOpen}
+          onClose={() => setIsReportOpen(false)}
+          propertyId={property.id}
+          propertyTitle={property.title}
+        />
       </Container>
     </div>
   )

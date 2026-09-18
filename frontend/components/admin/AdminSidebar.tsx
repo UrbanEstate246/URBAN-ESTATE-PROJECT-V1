@@ -10,6 +10,7 @@ import {
   FileText,
   ArrowLeft,
   ShieldCheck,
+  Sliders,
 } from 'lucide-react'
 
 export default function AdminSidebar() {
@@ -22,11 +23,6 @@ export default function AdminSidebar() {
       icon: CheckCircle2,
     },
     {
-      label: 'All Properties',
-      href: '/admin/properties/all',
-      icon: Building,
-    },
-    {
       label: 'Users & Roles',
       href: '/admin/users',
       icon: Users,
@@ -35,6 +31,11 @@ export default function AdminSidebar() {
       label: 'Audit Logs',
       href: '/admin/logs',
       icon: FileText,
+    },
+    {
+      label: 'Feature Flags',
+      href: '/admin/settings',
+      icon: Sliders,
     },
   ]
 

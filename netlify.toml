@@ -1,11 +1,10 @@
 [build]
-  base = "frontend"
+  base = "realestate"
   command = "npm run build"
   publish = ".next"
-  functions = "netlify/functions"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "22"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"

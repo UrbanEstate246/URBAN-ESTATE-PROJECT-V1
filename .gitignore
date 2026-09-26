@@ -33,3 +33,11 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+.playwright-mcp/
+localhost-*.png
+scratch_apply.js
+**/.env
+**/.env.*
+!**/.env.example
+realestate/.next/
+realestate/node_modules/

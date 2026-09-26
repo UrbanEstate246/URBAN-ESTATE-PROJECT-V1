@@ -54,10 +54,10 @@ export default function Navbar({ theme = "dark" }) {
             Explore Properties
           </Link>
           <Link
-            href="/commonrules"
+            href="/blog"
             className="transition hover:text-[#1E7F4B] hover:-translate-y-0.5"
           >
-            Verification Standards
+            Guides
           </Link>
           <Link
             href="/addProperty"
@@ -177,7 +177,8 @@ export default function Navbar({ theme = "dark" }) {
           {[
             ["Explore Properties", "/properties"],
             ["List a Property", "/addProperty"],
-            ["Verification Standards", "/commonrules"],
+            ["Guides", "/blog"],
+            ["Listing Standards", "/commonrules"],
             ["My Bookings", "/booking"],
             ["Saved Properties", "/Favourite"],
           ].map(([label, href]) => (

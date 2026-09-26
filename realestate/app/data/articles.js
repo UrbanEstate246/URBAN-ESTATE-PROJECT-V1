@@ -1,0 +1,436 @@
+// Guides published at /blog. Educational content for renters, buyers and listers.
+// NOTE FOR AUTOMATED CLEANUPS: words like "Ardhi Sasa", "deposit", "due diligence" and "licensed"
+// appear here on purpose — these articles teach readers how to protect themselves. They do not
+// claim UrbanEstate offers those services. Do not strip or delete them in marketing sweeps.
+//
+// Block types: { h } section heading · { p } paragraph · { ul } / { ol } list · { tip } callout.
+// Inline markup inside strings: **bold** and [link text](/path).
+
+export const ARTICLE_CATEGORIES = ["Listing guides", "Stay safe", "Area guides"];
+
+export const ARTICLES = [
+  // ---------------------------------------------------------------- LISTING GUIDES
+  {
+    slug: "how-to-list-your-property-on-urbanestate",
+    category: "Listing guides",
+    title: "How to list your property on UrbanEstate (free, step by step)",
+    description:
+      "A step-by-step guide for landlords, agents and owners: create an account, add photos, set your price and publish a rental, sale or land listing anywhere in Kenya — free.",
+    keywords: ["list property Kenya", "advertise house for rent Kenya", "post rental listing free", "sell land Kenya online"],
+    date: "2026-09-26",
+    readMinutes: 5,
+    blocks: [
+      { p: "Whether you have a bedsitter in Kasarani, a maisonette in Syokimau or an acre in Nyandarua, you can put it in front of people searching in your county in about ten minutes. **Listing on UrbanEstate is free.** Here is exactly how to do it." },
+      { h: "Step 1: Create your account" },
+      { p: "Go to [Create account](/signup) and choose **\"I'm listing\"**. Enter your name, email, a Kenyan phone number (07… or 01…) and a password of at least 8 characters. Pick your county if you like. You are signed in straight away and taken to the listing form." },
+      { tip: "Already have an account? [Sign in](/login) and click **List Property** in the menu." },
+      { h: "Step 2: The basics" },
+      { ul: [
+        "**Title** — say what it is and where: \"Spacious 2 bedroom apartment in Kilimani, near Yaya Centre\" beats \"Nice house\".",
+        "**Description** — what the space is like and what is nearby.",
+        "**Property type** — bedsitter, single room, studio, 1, 2 or 3+ bedroom, maisonette, bungalow, townhouse, hostel or student room, shop, office, warehouse or land.",
+        "**Category** — rent for monthly rentals, sale for houses and apartments you are selling, land for plots and farms.",
+        "**Price in KES** — for rentals this is the monthly rent. Don't hide it; listings with a clear price get more serious enquiries.",
+      ] },
+      { h: "Step 3: Location" },
+      { p: "Choose the **county** first, then start typing the **town or estate** — we suggest the common ones for that county (for example Ruaka, Ruiru, Juja or Thika in Kiambu). Finally add a **road or landmark** such as \"off Kiambu Road, near Ridgeways Mall\". Don't publish your exact house number; share it with serious enquirers." },
+      { h: "Step 4: Details and amenities" },
+      { p: "Add bedrooms and bathrooms (skipped automatically for land), then tick what's included, such as water, electricity tokens, parking and security. Use the description to cover what the checkboxes don't — deposit terms, when it's available, and what is nearby." },
+      { h: "Step 5: Photos" },
+      { p: "Add up to 10 photos straight from your phone. They upload while you fill in the form, we shrink them automatically so they work even on mobile data, and each one is watermarked \"Posted on URBAN ESTATE\" to discourage people copying them. Your first photo becomes the cover. Read our guide to [taking listing photos with your phone](/blog/listing-photos-with-your-phone)." },
+      { h: "Step 6: Publish and manage" },
+      { p: "Click **Publish listing** and it goes live in search for its county and town. You'll find it under **My Listings**. Our team reviews listings, and ones we have checked carry a **Verified** badge." },
+      { h: "Listing rules in short" },
+      { ul: [
+        "Only list property you own or are authorised by the owner to advertise.",
+        "Use real, current photos of the actual property.",
+        "Keep the price and availability accurate; remove it once it's let or sold.",
+        "No duplicate listings of the same unit.",
+      ] },
+      { p: "The full rules are on our [listing standards](/commonrules) page. Questions? Call or WhatsApp our team — we'll help you get your first listing up." },
+    ],
+  },
+  {
+    slug: "listing-photos-with-your-phone",
+    category: "Listing guides",
+    title: "How to take property listing photos with your phone that get more calls",
+    description:
+      "Simple phone photography tips for Kenyan landlords and agents: light, angles, order and what to avoid, so your rental or sale listing stands out.",
+    keywords: ["property photos tips", "real estate photography phone", "rental listing photos Kenya"],
+    date: "2026-09-26",
+    readMinutes: 4,
+    blocks: [
+      { p: "People decide in seconds whether to open a listing, and the cover photo does most of the work. You don't need a professional camera — a recent phone and these habits are enough." },
+      { h: "Before you shoot" },
+      { ul: [
+        "**Clean and clear.** Make beds, clear counters, remove buckets, shoes and laundry. Open curtains.",
+        "**Shoot in daylight.** Mid-morning or mid-afternoon light is softest. Turn on all the lights too.",
+        "**Wipe your lens.** A greasy lens is the number one cause of hazy photos.",
+      ] },
+      { h: "How to shoot" },
+      { ol: [
+        "Hold the phone **horizontally** (landscape) and at chest height.",
+        "Stand in a **corner** of the room and point towards the opposite corner — this shows the most space.",
+        "Keep vertical lines straight: walls and door frames should not lean.",
+        "Use the normal 1× lens. Ultra-wide can help in small rooms, but don't distort the space — tenants who feel misled won't take the unit.",
+        "Don't use heavy filters. Accurate beats pretty.",
+      ] },
+      { h: "Which photos, in which order" },
+      { ol: [
+        "**Cover:** the best room or the outside of the building/compound.",
+        "Living room, then kitchen.",
+        "Each bedroom, then bathrooms (toilet seat down).",
+        "Balcony, view, parking, gate and compound.",
+        "For land: the plot from each corner, the beacons, the access road and any nearby landmark.",
+      ] },
+      { tip: "Six to ten good photos beat twenty rushed ones. Delete blurry and duplicate shots." },
+      { h: "What to avoid" },
+      { ul: [
+        "Photos of a different unit or show house without saying so.",
+        "People, number plates or anything personal in the frame.",
+        "Screenshots or images copied from other websites.",
+      ] },
+      { p: "Ready? [List your property free](/signup) — photos upload straight from your phone." },
+    ],
+  },
+  {
+    slug: "write-and-price-a-listing-that-gets-enquiries",
+    category: "Listing guides",
+    title: "How to write and price a property listing in Kenya that gets serious enquiries",
+    description:
+      "A copy-and-paste template for rental and sale listings, plus a practical way to price your house, apartment or land using comparable listings in your area.",
+    keywords: ["how to price rental Kenya", "property listing description template", "rent price Nairobi"],
+    date: "2026-09-26",
+    readMinutes: 6,
+    blocks: [
+      { p: "Most listings fail for two reasons: the description doesn't answer basic questions, and the price is out of line with the area. Fix both and your phone rings with better enquiries." },
+      { h: "A title that does the work" },
+      { p: "Formula: **size + type + estate + one selling point**. Examples:" },
+      { ul: [
+        "\"2 bedroom apartment in Kileleshwa with borehole and backup generator\"",
+        "\"Bedsitter in Roysambu, 5 minutes to Thika Road\"",
+        "\"1/8 acre plot in Kitengela, ready title, 800m off Namanga Road\"",
+      ] },
+      { h: "Description template" },
+      { p: "Copy this and fill it in:" },
+      { ol: [
+        "**One-line summary** — who it suits (\"Ideal for a young family working in Westlands\").",
+        "**The space** — rooms, finishes, floor level, lift, balcony.",
+        "**Utilities** — water source and reliability, electricity (token or postpaid), backup power.",
+        "**Security and compound** — gate, guard, CCTV, parking spaces.",
+        "**Location** — distance to the main road, matatu stage, schools, shops, hospital.",
+        "**Terms** — monthly rent, deposit, any service charge, date available. For sale: price, title type, whether it is negotiable.",
+        "**Viewing** — when viewings are possible and how to reach you.",
+      ] },
+      { tip: "Be upfront about the downsides (\"4th floor, no lift\"). It filters out people who would waste your time and builds trust with the right ones." },
+      { h: "How to price it" },
+      { ol: [
+        "**Find comparables.** Search [UrbanEstate](/properties) and other listings for the same type in the same estate — not just the same county. A 2 bedroom in Kilimani and one in Ruaka are different markets.",
+        "**Adjust honestly.** Newer building, borehole, lift, parking and security justify more. Older finishes, poor road access or unreliable water mean less.",
+        "**Consider speed.** Every empty month costs you a full month's rent. Pricing slightly under the market often earns more over a year than waiting for a top price.",
+        "**Watch the response.** If you get no enquiries in two weeks, your price or photos are the problem. Adjust one and try again.",
+      ] },
+      { h: "For sales and land" },
+      { p: "Buyers will do their own checks, so have your documents ready: a copy of the title, a recent official search, rates or land rent clearance where applicable, and for land, the survey map and beacons. Listings with paperwork ready sell faster. See [buying land safely](/blog/buying-land-in-kenya-checklist) for what serious buyers will ask for." },
+      { p: "Put it into practice: [list your property free](/signup)." },
+    ],
+  },
+
+  // ---------------------------------------------------------------- STAY SAFE
+  {
+    slug: "rental-scams-in-kenya-warning-signs",
+    category: "Stay safe",
+    title: "Rental scams in Kenya: 9 warning signs before you pay a deposit",
+    description:
+      "Fake landlords, viewing fees and houses that don't exist. How rental scams work in Kenya, the red flags to watch for, and what to do if you've been targeted.",
+    keywords: ["rental scams Kenya", "fake landlord Nairobi", "house hunting scam", "deposit fraud Kenya"],
+    date: "2026-09-26",
+    readMinutes: 6,
+    blocks: [
+      { p: "House hunting scams cost Kenyans a lot of money every year, and they usually follow the same script: an attractive house at a great price, pressure to pay quickly, and a person you never meet. Knowing the signs is the best protection." },
+      { h: "The 9 warning signs" },
+      { ol: [
+        "**The price is far below the area.** A 2 bedroom in Kilimani at bedsitter prices is bait.",
+        "**You're asked to pay before viewing.** Never pay a deposit, \"booking fee\" or rent for a place you haven't seen in person.",
+        "**A \"viewing fee\" or \"registration fee\".** Genuine landlords and caretakers don't charge you to look.",
+        "**The \"landlord\" is abroad or unavailable** and asks you to send money so they can post the keys.",
+        "**Pressure and urgency.** \"Three other people want it, pay now to secure it.\"",
+        "**Payment to a personal number** that doesn't match the name of the owner or a registered company.",
+        "**The same photos appear on other listings** with different locations or prices.",
+        "**No written agreement**, or the agreement has no ID or contact details for the landlord.",
+        "**The caretaker and \"landlord\" tell different stories** about who owns the building.",
+      ] },
+      { tip: "Rule of thumb: **no viewing, no payment.** Meet on site, in daylight, preferably with someone you trust." },
+      { h: "Before you pay anything" },
+      { ul: [
+        "Visit the unit, test the taps, switches and locks, and talk to a neighbour or the caretaker.",
+        "Ask who the owner or managing agent is, and confirm with the building management office if there is one.",
+        "Get a written tenancy agreement naming the landlord, the unit, rent, deposit and notice period.",
+        "Pay through a traceable method and get a receipt for every payment — deposit and rent.",
+      ] },
+      { h: "If you've been scammed" },
+      { ol: [
+        "Stop all further payments and keep every message, number and transaction code.",
+        "Report to the nearest police station or the Directorate of Criminal Investigations (DCI) and get an OB number.",
+        "If you paid by M-Pesa, contact Safaricom immediately. Safaricom customers can also forward scam SMS messages to 333.",
+        "Warn others: report the listing to the website or group where you found it.",
+      ] },
+      { p: "Seen a suspicious listing on UrbanEstate? Tell us by phone, WhatsApp or email and we'll take it down while we check it. Our [listing standards](/commonrules) explain what we expect from everyone who lists." },
+    ],
+  },
+  {
+    slug: "buying-land-in-kenya-checklist",
+    category: "Stay safe",
+    title: "Buying land in Kenya: the due diligence checklist before you pay",
+    description:
+      "Official searches, surveyors, Land Control Board consent, rates clearance and stamp duty — a clear checklist to avoid fake titles and double allocation when buying land in Kenya.",
+    keywords: ["buying land in Kenya", "land search Kenya", "Ardhi Sasa search", "fake title deed Kenya", "land due diligence"],
+    date: "2026-09-26",
+    readMinutes: 8,
+    blocks: [
+      { p: "Land is the biggest purchase many Kenyan families ever make, and it is also where the most expensive frauds happen: fake titles, plots sold twice, and land that turns out to be on a road reserve. Nearly all of it is avoidable with a few checks done **before** you pay. This is general guidance, not legal advice — always use an advocate for the transaction." },
+      { h: "1. Get a copy of the title and ID of the seller" },
+      { p: "Ask for a copy of the title deed (or certificate of lease for leasehold land) and the seller's ID or company registration documents. The name on the title must match the seller. If someone is selling on behalf of the owner, ask for a registered power of attorney. For land still under an estate, confirm there is a grant from the court." },
+      { h: "2. Do an official search" },
+      { p: "An official search shows the registered owner and any **encumbrances**: a charge (bank loan), caveat, caution or restriction. Do it yourself or through your advocate — at the relevant land registry, or on **Ardhi Sasa** (ardhisasa.lands.go.ke) for registries that have moved online. Don't rely on a search the seller hands you; get your own, and repeat it just before completion." },
+      { h: "3. Visit the land with a licensed surveyor" },
+      { ul: [
+        "Get the registry index map (RIM) or survey plan for the parcel.",
+        "Have a licensed surveyor locate the **beacons** and confirm the size and boundaries match the title.",
+        "Check access: is there a registered road to the plot, or only a footpath through a neighbour's land?",
+        "Look out for road reserves, riparian land near rivers, wayleaves under power lines, and people living on or farming the land.",
+      ] },
+      { h: "4. Talk to the neighbours and local administration" },
+      { p: "Neighbours and the area chief often know about family disputes, previous sales or boundary fights that no document shows. It's a cheap, powerful check." },
+      { h: "5. Check land use and county matters" },
+      { ul: [
+        "Confirm zoning with the county planning office if you plan to build — especially for flats or commercial use.",
+        "Ask for a **rates clearance certificate** from the county government.",
+        "For leasehold land, ask for a **land rent clearance** certificate as well.",
+      ] },
+      { h: "6. Land Control Board consent (agricultural land)" },
+      { p: "Most transactions involving agricultural land need consent from the local **Land Control Board** before transfer. Without it, the transaction can be void. Your advocate will apply; plan for it in your timeline." },
+      { h: "7. Sign a proper sale agreement and pay safely" },
+      { ul: [
+        "Use an advocate to draft or review the sale agreement: price, payment schedule, completion date and what happens if either side defaults.",
+        "Avoid paying large sums in cash. Pay in stages tied to completion, ideally through advocates.",
+        "Budget for **stamp duty** — at the time of writing 4% of value for property in municipalities and 2% in rural areas — plus legal and registration fees. Confirm current rates with your advocate.",
+      ] },
+      { h: "8. Transfer and registration" },
+      { p: "The land is only yours once the transfer is registered and a new title is issued in your name. Do a final search after registration to confirm." },
+      { tip: "Red flags: pressure to pay a deposit \"today\", a seller who avoids the site visit, a title that looks new but the seller can't explain its history, or a price far below the neighbours'." },
+      { p: "Browse land and plots across all 47 counties on [UrbanEstate](/properties?category=land), and read [how to verify agents, advocates and surveyors](/blog/verify-agent-advocate-surveyor-kenya)." },
+    ],
+  },
+  {
+    slug: "verify-agent-advocate-surveyor-kenya",
+    category: "Stay safe",
+    title: "How to check an estate agent, advocate or surveyor in Kenya before you trust them",
+    description:
+      "Quick checks for estate agents (EARB register), advocates (Law Society of Kenya) and surveyors before you hand over money or documents.",
+    keywords: ["registered estate agent Kenya", "EARB", "check advocate LSK", "licensed surveyor Kenya"],
+    date: "2026-09-26",
+    readMinutes: 4,
+    blocks: [
+      { p: "Most property professionals in Kenya are honest, but the ones who aren't can cost you your savings. A few minutes of checking before you pay anyone is time well spent." },
+      { h: "Estate agents" },
+      { p: "Under the Estate Agents Act, people who practise as estate agents should be registered with the **Estate Agents Registration Board (EARB)**, which publishes a register of registered agents. Ask for the agent's full name and firm, check the register, and be wary of anyone who refuses to give their details." },
+      { ul: [
+        "Ask what the agent charges and who pays — get it in writing before viewings.",
+        "An agent should be able to show authority from the owner to market the property.",
+        "Never pay an agent a \"deposit\" for a rental into a personal account without a receipt and agreement.",
+      ] },
+      { h: "Advocates (lawyers)" },
+      { p: "For any purchase, use an advocate — and make sure they are one. The **Law Society of Kenya (LSK)** has an online search where you can confirm an advocate is admitted and holds a current practising certificate. Choose your own advocate rather than only using the seller's." },
+      { h: "Surveyors" },
+      { p: "Boundary work and beacon identification should be done by a **licensed surveyor**. Ask for their licence details and confirm them with the professional body. A surveyor's report on beacons and size is one of the best protections when buying land." },
+      { h: "Valuers" },
+      { p: "If you're borrowing from a bank, the bank will usually appoint a registered valuer. For your own decisions, ask any valuer for their registration details too." },
+      { tip: "Anyone who is genuine won't mind you checking. Anyone who gets angry or pushy when you ask is giving you your answer." },
+      { p: "More: [buying land safely](/blog/buying-land-in-kenya-checklist) · [rental scam warning signs](/blog/rental-scams-in-kenya-warning-signs)." },
+    ],
+  },
+  {
+    slug: "before-you-sign-a-tenancy-agreement-kenya",
+    category: "Stay safe",
+    title: "Before you sign a tenancy agreement in Kenya: deposits, terms and move-in checks",
+    description:
+      "What to check before renting a house in Kenya — deposits, the tenancy agreement, utilities, and a move-in inspection checklist that protects your deposit when you leave.",
+    keywords: ["tenancy agreement Kenya", "rent deposit Kenya", "renting a house Kenya checklist", "tenant rights Kenya"],
+    date: "2026-09-26",
+    readMinutes: 6,
+    blocks: [
+      { p: "Most disputes between landlords and tenants — especially over deposits — come from things nobody wrote down at the start. Spend an hour on these checks and you avoid weeks of arguments later." },
+      { h: "Understand the money upfront" },
+      { ul: [
+        "**First month's rent** — paid before you move in.",
+        "**Rent deposit** — commonly one month's rent, sometimes more. Agree in writing when and how it will be refunded.",
+        "**Utility deposits** — some buildings ask for a separate water deposit.",
+        "**Service charge** — for apartments, ask whether it's included in the rent.",
+        "**Agent's fee** — if an agent is involved, agree who pays it and how much before you view.",
+      ] },
+      { tip: "Get a receipt for every payment, including the deposit. Pay through a traceable method." },
+      { h: "Read the tenancy agreement" },
+      { p: "Insist on a written agreement. It should name the landlord (or managing agent) with contact details, the exact unit, the monthly rent and due date, the deposit amount and refund terms, the notice period for both sides, who handles which repairs, and any rules about rent increases, subletting, pets or running a business from the house." },
+      { h: "Check utilities before you commit" },
+      { ul: [
+        "Water: how many days a week does it flow? Is there a tank or borehole?",
+        "Electricity: prepaid token meter or postpaid? Is the meter for your unit only?",
+        "Mobile signal and internet providers available in the building.",
+      ] },
+      { h: "Move-in inspection checklist" },
+      { p: "On moving day, walk through every room with the landlord or caretaker and note the condition. Take dated photos and both sign the list. Check:" },
+      { ul: [
+        "Walls and ceilings — cracks, damp, peeling paint.",
+        "Floors, doors, windows, locks and keys (count them).",
+        "Taps, shower, toilet flush, sinks and drainage.",
+        "Sockets, switches, bulbs and the meter reading.",
+        "Kitchen fittings, wardrobes, burglar-proofing and any furniture.",
+      ] },
+      { h: "When you move out" },
+      { p: "Give notice in writing as the agreement requires, repeat the inspection with the landlord, and compare against your move-in photos. Fair wear and tear is normal; damage beyond that can be deducted. Agree the refund date in writing." },
+      { p: "Looking for a place? Search rentals by county and town on [UrbanEstate](/properties?category=rent), and read the [rental scam warning signs](/blog/rental-scams-in-kenya-warning-signs) first." },
+    ],
+  },
+
+  // ---------------------------------------------------------------- AREA GUIDES (SEO)
+  {
+    slug: "where-to-rent-in-nairobi-neighbourhood-guide",
+    category: "Area guides",
+    title: "Where to rent in Nairobi: a neighbourhood guide for every budget",
+    description:
+      "From Kasarani and Rongai to Kilimani, Westlands and Karen — how Nairobi's neighbourhoods compare on budget, commute and lifestyle, plus satellite towns like Ruaka and Syokimau.",
+    keywords: ["where to live in Nairobi", "affordable houses for rent Nairobi", "Kilimani apartments", "Nairobi neighbourhoods", "bedsitter Nairobi"],
+    date: "2026-09-26",
+    readMinutes: 7,
+    blocks: [
+      { p: "Where you rent in Nairobi decides your commute, your weekly budget and your weekends. Rents change constantly, so instead of quoting numbers that go stale, this guide groups neighbourhoods by budget and explains the trade-offs. Check current prices on [Nairobi listings](/counties/nairobi)." },
+      { h: "Budget-friendly: bedsitters, single rooms and 1 bedrooms" },
+      { ul: [
+        "**Kasarani, Roysambu and Githurai** — along Thika Road, good matatu links and malls nearby; traffic at peak hours is the trade-off.",
+        "**Kahawa West and Kahawa Wendani** — popular with students and young workers near Kenyatta University.",
+        "**Umoja, Donholm, Embakasi and Utawala** — Eastlands estates with a wide range of flats; check water reliability carefully.",
+        "**Ongata Rongai and Kitengela** — technically in Kajiado County, with more space for the money; commute times into town are the main cost.",
+      ] },
+      { h: "Mid-range: 1–3 bedroom apartments" },
+      { ul: [
+        "**South B and South C** — established estates close to the CBD and Mombasa Road.",
+        "**Madaraka, Nairobi West and Lang'ata** — convenient for town and universities, a mix of older and newer blocks.",
+        "**Parklands and Ngara** — close to Westlands and the CBD, many newer apartment blocks.",
+        "**Ruaka** (Kiambu) — fast-growing, lots of new apartments near Two Rivers and Limuru Road.",
+        "**Syokimau and Athi River** (Machakos) — good value, close to JKIA and the SGR terminus.",
+      ] },
+      { h: "Upper-mid: apartments with amenities" },
+      { ul: [
+        "**Kilimani** — central, busy, packed with apartments near Yaya Centre and Ngong Road.",
+        "**Kileleshwa** — leafier and a little quieter than Kilimani, popular with families.",
+        "**Westlands** — offices, restaurants and nightlife; great if you work there.",
+        "**Lavington** — quiet, green, a mix of townhouses and apartments.",
+      ] },
+      { h: "Premium: houses and diplomatic areas" },
+      { ul: [
+        "**Karen** — large plots, gardens and family homes.",
+        "**Runda, Muthaiga, Gigiri and Spring Valley** — high-end homes near the UN and embassies.",
+      ] },
+      { h: "How to choose" },
+      { ol: [
+        "Map your daily commute at rush hour, not at midday.",
+        "Visit at night to judge security and noise.",
+        "Ask neighbours how many days water flows each week.",
+        "Compare at least three units before paying anything — and never pay before viewing.",
+      ] },
+      { p: "Start your search: [Westlands](/properties?county=Nairobi&area=Westlands) · [Kilimani](/properties?county=Nairobi&area=Kilimani) · [Kasarani](/properties?county=Nairobi&area=Kasarani) · [Ruaka](/properties?county=Kiambu&area=Ruaka) · [Syokimau](/properties?county=Machakos&area=Syokimau) · [Rongai](/properties?county=Kajiado&area=Ongata%20Rongai)." },
+    ],
+  },
+  {
+    slug: "kenyan-property-terms-explained",
+    category: "Area guides",
+    title: "Bedsitter, single room, DSQ, maisonette: Kenyan property terms explained",
+    description:
+      "What Kenyans mean by bedsitter, single room, studio, DSQ, maisonette, bungalow, en-suite, token meter, freehold, leasehold and more — a plain-language glossary for renters and buyers.",
+    keywords: ["what is a bedsitter", "bedsitter vs studio", "DSQ meaning Kenya", "maisonette vs bungalow", "freehold vs leasehold Kenya"],
+    date: "2026-09-26",
+    readMinutes: 5,
+    blocks: [
+      { p: "Kenyan property listings have their own vocabulary. If you're new to house hunting here — or coming home from the diaspora — this glossary will help you read listings correctly." },
+      { h: "Types of homes" },
+      { ul: [
+        "**Single room** — one room, usually with a shared toilet and bathroom in the compound. The most affordable option.",
+        "**Bedsitter** — one room with a small kitchen area and its **own** bathroom. A step up from a single room.",
+        "**Studio** — an open-plan unit where the living, sleeping and kitchen areas share one space, typically in newer buildings with a separate bathroom.",
+        "**1, 2, 3 bedroom** — apartments or houses with separate bedrooms plus a living room and kitchen.",
+        "**Maisonette** — a house on two floors, often in a gated estate, with bedrooms upstairs.",
+        "**Bungalow** — a single-storey house.",
+        "**Townhouse** — one of a row or group of similar houses, usually in a gated compound with shared security.",
+        "**DSQ / SQ** — domestic servant quarters: a small separate unit in the compound, sometimes rented out on its own.",
+      ] },
+      { h: "Features you'll see in listings" },
+      { ul: [
+        "**En-suite / all en-suite** — the bedroom has its own bathroom; \"all en-suite\" means every bedroom does.",
+        "**Master en-suite** — only the main bedroom has its own bathroom.",
+        "**Token meter** — prepaid electricity; you buy tokens as you go.",
+        "**Borehole** — the building has its own water source, a big plus where county water is irregular.",
+        "**Backup generator** — power for lifts, lights and water pumps during blackouts.",
+        "**Gated community** — an estate with a controlled entrance and shared security.",
+        "**Service charge** — a monthly fee for shared costs like security, cleaning and garbage collection.",
+      ] },
+      { h: "Land and ownership terms" },
+      { ul: [
+        "**Freehold** — ownership without a time limit.",
+        "**Leasehold** — ownership for a fixed term (for example 99 years), usually with annual land rent.",
+        "**Title deed** — the document showing registered ownership of land.",
+        "**Share certificate / allotment letter** — used in some land-buying companies and developments before individual titles are issued. Understand exactly what you are buying and when a title will be issued.",
+        "**Official search** — a check at the land registry showing the owner and any charges on the land. See [buying land safely](/blog/buying-land-in-kenya-checklist).",
+        "**Beacons** — markers placed by a surveyor at the corners of a plot.",
+        "**1/8 acre (50 × 100)** — a common plot size in Kenya, roughly 50 by 100 feet.",
+      ] },
+      { p: "Now you speak the language: [search bedsitters, apartments, houses and land](/properties) in all 47 counties." },
+    ],
+  },
+  {
+    slug: "renting-and-buying-beyond-nairobi",
+    category: "Area guides",
+    title: "Beyond Nairobi: renting and buying in Mombasa, Kisumu, Nakuru, Eldoret and other towns",
+    description:
+      "A guide to property in Kenya's other big towns — Mombasa, Kisumu, Nakuru, Eldoret, Thika, Nanyuki, Naivasha and Machakos — with the estates people search for most.",
+    keywords: ["houses for rent Mombasa", "houses for rent Kisumu", "houses for rent Nakuru", "Eldoret rentals", "land for sale Kenya towns"],
+    date: "2026-09-26",
+    readMinutes: 7,
+    blocks: [
+      { p: "Kenya's property market isn't only Nairobi. Growing towns across the country offer more space for the money, shorter commutes and a slower pace of life. Here is where people look in the main towns — use the links to see current listings." },
+      { h: "Mombasa and the coast" },
+      { p: "**Nyali** and **Bamburi** on the north mainland are the most searched, with apartments close to the beach and malls. **Kizingo** on the island is central and established, while **Shanzu** and **Mtwapa** (Kilifi County) further north attract holiday and long-stay renters. On the south coast, **Diani** in Kwale is popular for holiday homes. [Mombasa County](/counties/mombasa) · [Diani](/properties?county=Kwale&area=Diani)." },
+      { h: "Kisumu" },
+      { p: "**Milimani** is the established upmarket area near the city centre, **Riat Hills** offers views over the lake, and **Mamboleo**, **Kondele** and **Nyalenda** cover a wide range of budgets. [Kisumu County](/counties/kisumu)." },
+      { h: "Nakuru" },
+      { p: "Nakuru's growth has pushed demand in **Milimani**, **Section 58** and **Lanet**, while **Naivasha**, **Gilgil** and **Mai Mahiu** attract both residents and weekend-home buyers. [Nakuru County](/counties/nakuru) · [Naivasha](/properties?county=Nakuru&area=Naivasha)." },
+      { h: "Eldoret" },
+      { p: "In Uasin Gishu, **Elgon View** is the established upmarket area, with **Kapsoya**, **Pioneer**, **Annex** and **Langas** covering mid-range and affordable rentals. Student housing is in demand around the universities. [Uasin Gishu County](/counties/uasin-gishu)." },
+      { h: "Satellite towns around Nairobi" },
+      { ul: [
+        "**Thika, Ruiru and Juja** (Kiambu) — along the Thika Superhighway; strong student and family rental demand. [Kiambu County](/counties/kiambu).",
+        "**Syokimau, Athi River and Machakos town** (Machakos) — close to JKIA and the SGR. [Machakos County](/counties/machakos).",
+        "**Kitengela, Ongata Rongai and Ngong** (Kajiado) — popular for plots and first family homes. [Kajiado County](/counties/kajiado).",
+      ] },
+      { h: "Mount Kenya and the central highlands" },
+      { p: "**Nanyuki** (Laikipia) is a favourite for weekend homes and remote workers, while **Nyeri**, **Karatina** and **Meru** have steady rental markets driven by schools, hospitals and county offices. [Nanyuki](/properties?county=Laikipia&area=Nanyuki) · [Nyeri County](/counties/nyeri) · [Meru County](/counties/meru)." },
+      { h: "Tips for buying outside Nairobi" },
+      { ul: [
+        "Visit in person — photos can't show road access in the rainy season.",
+        "Check water sources and electricity connection costs for land.",
+        "The same land checks apply everywhere: official search, surveyor, Land Control Board consent for agricultural land. See our [land checklist](/blog/buying-land-in-kenya-checklist).",
+      ] },
+      { p: "UrbanEstate covers all 47 counties. [Browse by county](/#counties), or if you own property in any of these towns, [list it free](/signup)." },
+    ],
+  },
+];
+
+export const ARTICLE_BY_SLUG = Object.fromEntries(ARTICLES.map((a) => [a.slug, a]));
+
+export function relatedArticles(slug, limit = 3) {
+  const current = ARTICLE_BY_SLUG[slug];
+  if (!current) return [];
+  const same = ARTICLES.filter((a) => a.slug !== slug && a.category === current.category);
+  const others = ARTICLES.filter((a) => a.slug !== slug && a.category !== current.category);
+  return [...same, ...others].slice(0, limit);
+}

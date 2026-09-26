@@ -47,6 +47,9 @@ export default function Footer() {
               <Link href="/commonrules" className="hover:text-white transition">
                 Listing standards
               </Link>
+              <Link href="/blog" className="hover:text-white transition">
+                Property guides
+              </Link>
               <Link href="/addProperty" className="hover:text-white transition">
                 List a property free
               </Link>

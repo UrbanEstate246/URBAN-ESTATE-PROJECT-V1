@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -54,17 +54,17 @@ export default function PropertyGallery({ images = [] }) {
         setModalIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
 
     // TOUCH SWIPE
-    let startX = 0;
+    const startXRef = useRef(0);
 
     const onTouchStart = (e) => {
-        startX = e.touches[0].clientX;
+        startXRef.current = e.touches[0].clientX;
         setIsUserClicked(true);
     };
 
     const onTouchEnd = (e) => {
         const endX = e.changedTouches[0].clientX;
-        if (startX - endX > 50) triggerNext();
-        if (endX - startX > 50) triggerPrev();
+        if (startXRef.current - endX > 50) triggerNext();
+        if (endX - startXRef.current > 50) triggerPrev();
     };
 
     return (
@@ -167,7 +167,6 @@ export default function PropertyGallery({ images = [] }) {
                             {/* Next */}
                             <button
                                 className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full text-white"
-                                onClick={modalNext}
                             >
                                 <ChevronRight size={28} />
                             </button>

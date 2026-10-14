@@ -11,12 +11,53 @@ import {
     Square,
     MapPin,
     Phone,
+    MessageCircle,
     User,
     Heart,
-    Star,
-    X,
 } from "lucide-react";
 import Loading from "@/app/components/Loading";
+import { formatPhoneDisplay, telHref, whatsappHref } from "@/app/utils/phone";
+
+// Direct line to whoever owns the listing: one tap to call or WhatsApp, no middleman.
+function ContactCard({ contact, title }) {
+    if (!contact?.phone) return null;
+    const message = `Hello, I saw "${title}" on UrbanEstate and I'm interested.`;
+
+    return (
+        <div className="p-6 bg-white rounded-xl shadow-md">
+            <h3 className="text-lg font-bold mb-4">
+                {contact.direct ? "Contact the owner" : "Contact UrbanEstate about this listing"}
+            </h3>
+
+            <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gray-200 flex justify-center items-center">
+                    <User />
+                </div>
+                <div>
+                    <p className="font-semibold">{contact.name}</p>
+                    <p className="text-sm text-gray-600">
+                        {contact.direct ? "Listed by" : "Listing support"}
+                    </p>
+                </div>
+            </div>
+
+            <a
+                href={telHref(contact.phone)}
+                className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#1B8C66] py-3 text-lg font-semibold text-white hover:bg-[#157a58]"
+            >
+                <Phone size={20} /> Call {formatPhoneDisplay(contact.phone)}
+            </a>
+            <a
+                href={whatsappHref(contact.phone, message)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3 text-lg font-semibold text-white hover:bg-[#1fb355]"
+            >
+                <MessageCircle size={20} /> WhatsApp
+            </a>
+        </div>
+    );
+}
 
 export default function PropertyDetailsPage() {
     const { propertyid } = useParams();
@@ -25,19 +66,6 @@ export default function PropertyDetailsPage() {
     const [property, setProperty] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isFavourite, setIsFavourite] = useState(false);
-
-    // ⭐ Rating Modal
-    const [showRatingModal, setShowRatingModal] = useState(false);
-    const [selectedRating, setSelectedRating] = useState(0);
-    const [loadingRating, setLoadingRating] = useState(false);
-
-    // Mock images if property has few images
-    const mockImages = [
-        "https://images.unsplash.com/photo-1505691723518-36a5ac3be353?q=80",
-        "https://images.unsplash.com/photo-1600585152887-291b8f3d5b77?q=80",
-        "https://images.unsplash.com/photo-1586105251261-72a756497a11?q=80",
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80",
-    ];
 
     // Fetch property
     const getProperty = async () => {
@@ -115,37 +143,6 @@ export default function PropertyDetailsPage() {
         }
     };
 
-    // ⭐ Submit rating
-    const submitRating = async () => {
-        if (!selectedRating) return;
-
-        try {
-            setLoadingRating(true);
-
-            const res = await fetch(
-                `/api/rating/addrating?aid=${property.Agent?._id}`,
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
-                    body: JSON.stringify({ rating: selectedRating }),
-                }
-            );
-
-            const data = await res.json();
-
-            if (data.success) {
-                alert("Thank you! Rating submitted.");
-                setShowRatingModal(false);
-            } else {
-                alert(data.message);
-            }
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setLoadingRating(false);
-        }
-    };
-
     if (loading)
         return (
           <Loading />
@@ -158,10 +155,8 @@ export default function PropertyDetailsPage() {
             </div>
         );
 
-    const images =
-        property.images && property.images.length > 0
-            ? [...property.images, ...mockImages].slice(0, 4)
-            : mockImages;
+    // Only this listing's own photos (the API supplies a placeholder when there are none).
+    const images = property.images;
 
     return (
         <div className="bg-white min-h-screen text-[#102A23]">
@@ -239,33 +234,7 @@ export default function PropertyDetailsPage() {
                             </button>
                         </div>
 
-                        {/* AGENT CARD CLICKABLE */}
-                        <div
-                            onClick={() => setShowRatingModal(true)}
-                            className="p-6 bg-white rounded-xl shadow-md cursor-pointer hover:shadow-lg transition"
-                        >
-                            <h3 className="text-lg font-bold mb-4">Contact UrbanEstate about this listing</h3>
-
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full bg-gray-200 flex justify-center items-center">
-                                    <User />
-                                </div>
-
-                                <div>
-                                    <p className="font-semibold">
-                                        {property.contact?.name}
-                                    </p>
-                                    <p className="text-sm text-gray-600">
-                                        Listing support
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-2 mt-4 text-gray-700">
-                                <Phone size={18} />{" "}
-                                {property.contact?.phone}
-                            </div>
-                        </div>
+                        <ContactCard contact={property.contact} title={property.title} />
                     </div>
                 </div>
 
@@ -302,33 +271,7 @@ export default function PropertyDetailsPage() {
                             Book Now
                         </button>
 
-                        {/* MOBILE AGENT */}
-                        <div
-                            onClick={() => setShowRatingModal(true)}
-                            className="p-5 bg-white rounded-xl shadow cursor-pointer"
-                        >
-                            <h3 className="text-lg font-bold mb-4">Listed by</h3>
-
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full bg-gray-300 flex justify-center items-center">
-                                    <User />
-                                </div>
-
-                                <div>
-                                    <p className="font-semibold">
-                                        {property.Agent?.name}
-                                    </p>
-                                    <p className="text-sm text-gray-600">
-                                        Real Estate Agent
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-2 mt-4 text-gray-700">
-                                <Phone size={18} />{" "}
-                                {property.Agent?.phoneNumber || property.Agent?.phone || "0119 524 364"}
-                            </div>
-                        </div>
+                        <ContactCard contact={property.contact} title={property.title} />
                     </div>
                 </div>
 
@@ -350,66 +293,6 @@ export default function PropertyDetailsPage() {
                     </div>
                 )}
             </div>
-
-            {/** ⭐ Rating Modal */}
-            {showRatingModal && (
-                <div
-                    onClick={() => setShowRatingModal(false)}
-                    className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 bg-transparent"
-                >
-                    <div
-                        onClick={(e) => e.stopPropagation()}
-                        className="bg-white w-[90%] max-w-md p-6 rounded-2xl shadow-xl relative animate-scaleIn"
-                    >
-                        {/* Close Button */}
-                        <button
-                            onClick={() => setShowRatingModal(false)}
-                            className="absolute top-3 right-3 p-2 rounded-full hover:bg-gray-100"
-                        >
-                            <X size={22} />
-                        </button>
-
-                        <h2 className="text-xl font-bold mb-4">
-                            Rate {property.Agent?.name}
-                        </h2>
-
-                        {/* Stars */}
-                        <div className="flex gap-3 justify-center my-4">
-                            {[1, 2, 3, 4, 5].map((num) => (
-                                <Star
-                                    key={num}
-                                    size={38}
-                                    onClick={() => setSelectedRating(num)}
-                                    className={`cursor-pointer ${selectedRating >= num
-                                        ? "text-yellow-400 fill-yellow-400"
-                                        : "text-gray-300"
-                                        }`}
-                                />
-                            ))}
-                        </div>
-
-                        {/* Submit Button */}
-                        <button
-                            disabled={loadingRating}
-                            onClick={submitRating}
-                            className="w-full bg-green-600 text-white py-3 rounded-xl hover:bg-green-700"
-                        >
-                            {loadingRating ? "Submitting..." : "Submit Rating"}
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {/* Animation CSS */}
-            <style jsx global>{`
-        @keyframes scaleIn {
-          0% { transform: scale(0.8); opacity: 0; }
-          100% { transform: scale(1); opacity: 1; }
-        }
-        .animate-scaleIn {
-          animation: scaleIn 0.2s ease-out;
-        }
-      `}</style>
         </div>
     );
 }

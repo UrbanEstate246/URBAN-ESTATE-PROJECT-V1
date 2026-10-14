@@ -73,12 +73,20 @@ export default function Navbar({ theme = "dark" }) {
               Saved Homes
             </Link>
           )}
-          {isLoggedIn && role === "agent" && (
+          {isLoggedIn && (
             <Link
               href="/myProperties"
               className="transition hover:text-[#1E7F4B] hover:-translate-y-0.5"
             >
               My Listings
+            </Link>
+          )}
+          {isLoggedIn && role === "admin" && (
+            <Link
+              href="/admin"
+              className="transition hover:text-[#1E7F4B] hover:-translate-y-0.5"
+            >
+              Admin
             </Link>
           )}
         </nav>
@@ -192,13 +200,22 @@ export default function Navbar({ theme = "dark" }) {
               <span className="text-gray-400">→</span>
             </Link>
           ))}
-          {role === "agent" && (
+          {isLoggedIn && (
             <Link
               href="/myProperties"
               onClick={close}
               className="text-lg font-semibold text-[#1E7F4B] py-2 border-b border-gray-50"
             >
-              Agent Listings Dashboard
+              My Listings
+            </Link>
+          )}
+          {isLoggedIn && role === "admin" && (
+            <Link
+              href="/admin"
+              onClick={close}
+              className="text-lg font-semibold text-[#0B1F33] py-2 border-b border-gray-50"
+            >
+              Admin
             </Link>
           )}
         </nav>

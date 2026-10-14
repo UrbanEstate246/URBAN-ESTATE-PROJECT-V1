@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/app/utils/supabase";
 import { getAuthUser } from "@/app/utils/auth";
+import { destroyPhotos } from "@/app/utils/cloudinaryAssets";
 
 export async function DELETE(req) {
     try {
@@ -23,7 +24,7 @@ export async function DELETE(req) {
         }
 
         const { data: property } = await supabaseAdmin
-            .from("properties").select("owner_id").eq("id", propertiesId).maybeSingle();
+            .from("properties").select("owner_id, property_images(cloudinary_public_id)").eq("id", propertiesId).maybeSingle();
         if (!property) return NextResponse.json({ success: false, message: "Property not found" }, { status: 404 });
         if (property.owner_id !== user.id && user.role !== "admin") {
             return NextResponse.json({ success: false, message: "You cannot delete this property" }, { status: 403 });
@@ -40,6 +41,9 @@ export async function DELETE(req) {
                 { status: 500 }
             );
         }
+
+        // The rows are gone; also free the photos from Cloudinary (best effort).
+        await destroyPhotos((property.property_images || []).map((image) => image.cloudinary_public_id));
 
         return NextResponse.json(
             { success: true, message: "Property deleted successfully" },

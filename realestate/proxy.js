@@ -18,6 +18,7 @@ export const config = {
         "/api/favourite/:path*",
         "/api/rating/:path*",
         "/api/booking/:path*",
-        "/api/User/:path*"
+        "/api/User/:path*",
+        "/api/admin/:path*"
     ]
 };

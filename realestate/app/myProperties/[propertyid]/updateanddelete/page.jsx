@@ -2,9 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import Navbar from "../../../components/Navbar";
 import ImageGallery from "@/app/components/ImageGallery";
 import { Trash2, Edit3, AlertTriangle } from "lucide-react";
+import { authHeaders, redirectIfUnauthorized } from "@/app/utils/session";
+
+const inputClass =
+    "w-full mb-5 px-4 py-3 rounded-xl border-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-100";
 
 export default function UpdateDeletePage() {
     const { propertyid } = useParams();
@@ -13,14 +18,21 @@ export default function UpdateDeletePage() {
     const [data, setData] = useState({
         title: "",
         price: "",
-        status: "",
+        status: "available",
         images: [],
-        location: "",
+        city: "",
+        state: "",
         description: "",
+        contactPhone: "",
+        contactName: "",
     });
 
     const [loading, setLoading] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    useEffect(() => {
+        if (!localStorage.getItem("token")) window.location.replace(`/login?next=/myProperties/${propertyid}/updateanddelete`);
+    }, [propertyid]);
 
     /* ---------------- FETCH PROPERTY ---------------- */
     useEffect(() => {
@@ -38,8 +50,11 @@ export default function UpdateDeletePage() {
                         price: dt.property.price,
                         status: dt.property.status,
                         images: dt.property.images || [],
-                        location: dt.property.location,
-                        description: dt.property.description,
+                        city: dt.property.city,
+                        state: dt.property.state,
+                        description: dt.property.description || "",
+                        contactPhone: dt.property.contact?.direct ? dt.property.contact.phone : "",
+                        contactName: dt.property.contact?.direct ? dt.property.contact.name : "",
                     });
                 }
             } catch (err) {
@@ -54,33 +69,41 @@ export default function UpdateDeletePage() {
         e.preventDefault();
         setLoading(true);
 
+        const body = {
+            title: data.title,
+            price: data.price,
+            description: data.description,
+        };
+        // Owners can switch between live and hidden; other states (e.g. suspended by an admin) are left alone.
+        if (data.status === "available" || data.status === "hidden") body.status = data.status;
+        if (data.contactPhone) {
+            body.contactPhone = data.contactPhone;
+            body.contactName = data.contactName;
+        }
+
         try {
             const res = await fetch(
                 `/api/property/updatepropertysatus?pid=${propertyid}`,
                 {
                     method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                    body: JSON.stringify({
-                        title: data.title,
-                        price: data.price,
-                        status: data.status,
-                    }),
+                    headers: authHeaders({ "Content-Type": "application/json" }),
+                    body: JSON.stringify(body),
                 }
             );
 
+            if (redirectIfUnauthorized(res)) return;
             const out = await res.json();
             setLoading(false);
 
             if (out.success) {
+                toast.success("Listing updated.");
                 router.push("/myProperties");
             } else {
-                alert(out.message);
+                toast.error(out.message || "Could not update the listing.");
             }
         } catch (err) {
             setLoading(false);
+            toast.error("We couldn't reach the server. Try again.");
         }
     }
 
@@ -91,23 +114,27 @@ export default function UpdateDeletePage() {
                 `/api/property/deleteProperty?pid=${propertyid}`,
                 {
                     method: "DELETE",
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
+                    headers: authHeaders(),
                 }
             );
 
+            if (redirectIfUnauthorized(res)) return;
             const out = await res.json();
 
             if (out.success) {
+                toast.success("Listing deleted.");
                 router.push("/myProperties");
             } else {
-                alert(out.message);
+                setShowDeleteModal(false);
+                toast.error(out.message || "Could not delete the listing.");
             }
         } catch (err) {
             console.log(err);
+            toast.error("We couldn't reach the server. Try again.");
         }
     }
+
+    const editableStatus = data.status === "available" || data.status === "hidden";
 
     return (
         <div className="w-full bg-gray-50 min-h-screen">
@@ -160,22 +187,22 @@ export default function UpdateDeletePage() {
                             <h2 className="text-2xl font-bold text-black mb-2">
                                 {data.title}
                             </h2>
-                          <p className="text-gray-600 text-lg mt-1">
-                    {data.city}, {data.state}
-                </p>
+                            <p className="text-gray-600 text-lg mt-1">
+                                {data.city}, {data.state}
+                            </p>
 
                             <ImageGallery images={data.images} />
 
-                            <p className="mt-4 text-gray-700">
+                            <p className="mt-4 text-gray-700 whitespace-pre-line">
                                 {data.description}
                             </p>
 
                             <p className="mt-3 text-2xl font-bold text-green-600">
-                                ₹ {data.price}
+                                KES {Number(data.price || 0).toLocaleString()}
                             </p>
 
-                            <p className="mt-2 font-semibold text-red-600">
-                                Status: {data.status}
+                            <p className="mt-2 font-semibold text-gray-700">
+                                Status: {data.status === "available" ? "Live" : data.status}
                             </p>
                         </div>
                     </div>
@@ -190,23 +217,62 @@ export default function UpdateDeletePage() {
                                 <Edit3 size={22} /> Update Details
                             </h3>
 
+                            <label className="block mb-2 font-medium">Title</label>
+                            <input
+                                value={data.title}
+                                onChange={(e) => setData({ ...data, title: e.target.value })}
+                                required
+                                maxLength={200}
+                                className={inputClass}
+                            />
+
+                            <label className="block mb-2 font-medium">Price (KES)</label>
+                            <input
+                                type="number"
+                                min="1"
+                                value={data.price}
+                                onChange={(e) => setData({ ...data, price: e.target.value })}
+                                required
+                                className={inputClass}
+                            />
+
+                            <label className="block mb-2 font-medium">Phone buyers call</label>
+                            <input
+                                type="tel"
+                                inputMode="tel"
+                                value={data.contactPhone}
+                                onChange={(e) => setData({ ...data, contactPhone: e.target.value })}
+                                pattern={String.raw`^(\+?254|0)[\s\-]?[71](?:[\s\-]?\d){8}$`}
+                                title="A Kenyan number, e.g. 0712 345 678"
+                                placeholder="e.g. 0712 345 678"
+                                className={inputClass}
+                            />
+
+                            <label className="block mb-2 font-medium">Contact name</label>
+                            <input
+                                value={data.contactName}
+                                onChange={(e) => setData({ ...data, contactName: e.target.value })}
+                                maxLength={100}
+                                className={inputClass}
+                            />
 
                             <label className="block mb-2 font-medium">
-                                Status
+                                Visibility
                             </label>
                             <select
-                                value={data.status}
+                                value={editableStatus ? data.status : ""}
+                                disabled={!editableStatus}
                                 onChange={(e) =>
                                     setData({
                                         ...data,
                                         status: e.target.value,
                                     })
                                 }
-                                className="w-full mb-6 px-4 py-3 rounded-xl border-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                className="w-full mb-6 px-4 py-3 rounded-xl border-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-gray-100"
                             >
-                                <option value="available">available</option>
-                                <option value="sold">sold</option>
-                                <option value="rented">rented</option>
+                                {!editableStatus && <option value="">{data.status} (set by UrbanEstate)</option>}
+                                <option value="available">Live — shown in search</option>
+                                <option value="hidden">Hidden — not shown</option>
                             </select>
 
                             <button

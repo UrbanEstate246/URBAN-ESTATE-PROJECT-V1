@@ -7,8 +7,12 @@ export default function BookingListPage() {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
 
-
     useEffect(() => {
+        if (!localStorage.getItem("token")) {
+            window.location.replace("/login?next=/booking");
+            return;
+        }
+
         async function fetchBookings() {
             try {
                 const res = await fetch("/api/booking/getbooking", {
@@ -19,27 +23,18 @@ export default function BookingListPage() {
                 });
 
                 const data = await res.json();
-
                 setBookings(Array.isArray(data.data) ? data.data : []);
-
             } catch (error) {
                 console.log("Error fetching bookings:", error);
                 setBookings([]);
+            } finally {
+                setLoading(false);
             }
-
-            setLoading(false);
         }
 
         fetchBookings();
     }, []);
 
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    if (!token) {
-        if (typeof window !== 'undefined') {
-            window.location.href = '/login';
-        }
-        return null;
-    }
     const deleteBooking = async (id) => {
         if (!confirm("Are you sure you want to cancel this booking?")) return;
 
@@ -135,7 +130,7 @@ export default function BookingListPage() {
                             </div>
 
                             <p className="mt-3 text-green-600 font-bold text-lg">
-                                ₹ {item.property?.price}
+                                KES {Number(item.property?.price || 0).toLocaleString()}
                             </p>
                         </div>
                     ))}

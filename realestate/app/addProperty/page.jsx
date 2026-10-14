@@ -25,12 +25,27 @@ export default function AddPropertyPage() {
   const [county, setCounty] = useState("");
   const [type, setType] = useState("Bedsitter");
   const [category, setCategory] = useState("rent");
+  const [contactPhone, setContactPhone] = useState("");
+  const [contactName, setContactName] = useState("");
   const fileInput = useRef(null);
   const photosRef = useRef(photos);
   photosRef.current = photos;
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) window.location.replace("/login?next=/addProperty");
+    const token = localStorage.getItem("token");
+    if (!token) window.location.replace("/login?next=/addProperty");
+    else {
+      // Prefill the contact details from the account so most people just confirm them.
+      fetch("/api/User/getProfile", { headers: { Authorization: `Bearer ${token}` } })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          const profile = data?.userProfile;
+          if (!profile) return;
+          setContactPhone((current) => current || String(profile.phoneNumber || "").replace(/[\s-]/g, ""));
+          setContactName((current) => current || profile.name || "");
+        })
+        .catch(() => {});
+    }
     return () => photosRef.current.forEach((p) => URL.revokeObjectURL(p.preview));
   }, []);
 
@@ -198,6 +213,31 @@ export default function AddPropertyPage() {
               ))}
             </div>
           </fieldset>
+        </Section>
+
+        <Section title="Contact">
+          <p className="text-sm text-gray-600">
+            Buyers and tenants will call this number directly. Use the phone you answer for this property.
+          </p>
+          <Field label="Phone number">
+            <input
+              className={fieldClass}
+              name="contactPhone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              required
+              pattern="^(\+?254|0)[71]\d{8}$"
+              title="A Kenyan number, e.g. 0712 345 678 or +254 712 345 678"
+              placeholder="e.g. 0712 345 678"
+              value={contactPhone}
+              onChange={(e) => setContactPhone(e.target.value)}
+              onBlur={(e) => setContactPhone(e.target.value.replace(/[\s-]/g, ""))}
+            />
+          </Field>
+          <Field label="Contact name">
+            <input className={fieldClass} name="contactName" maxLength={100} placeholder="e.g. Mary (caretaker)" value={contactName} onChange={(e) => setContactName(e.target.value)} />
+          </Field>
         </Section>
 
         <Section title="Photos">

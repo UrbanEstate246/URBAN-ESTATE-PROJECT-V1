@@ -42,7 +42,7 @@ export default function Login() {
       saveSession(data);
       toast.success(`Welcome back, ${data.user.name}!`);
       // Full navigation so the navbar re-reads the new session.
-      window.location.href = safeNext("/");
+      window.location.href = safeNext(data.user.role === "admin" ? "/admin" : "/");
     } catch {
       setError("We couldn't reach the server. Check your connection and try again.");
     } finally {

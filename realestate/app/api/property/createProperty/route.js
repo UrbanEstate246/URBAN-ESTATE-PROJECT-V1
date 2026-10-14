@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/app/utils/supabase";
 import { getAuthUser } from "@/app/utils/auth";
 import { destroyPhotos, toPropertyImages } from "@/app/utils/cloudinaryAssets";
+import { normalizeKenyanPhone } from "@/app/utils/phone";
+
+// True when the database has not had the contact_phone/contact_name migration applied yet.
+const isMissingContactColumn = (error) => /contact_(phone|name)/i.test(error?.message || "");
 
 // Photos are uploaded by the browser straight to Cloudinary (see app/utils/uploadPhoto.js);
 // this route only receives small JSON: the form fields plus [{ public_id, version }].
@@ -36,6 +40,18 @@ export async function POST(req) {
 
     const { data: authData } = await supabaseAdmin.auth.admin.getUserById(user.id);
     const metadata = authData?.user?.user_metadata || {};
+
+    // Buyers call this number directly. Use the number typed on the form, else the owner's signup number.
+    const typedPhone = String(body.contactPhone || "").trim();
+    const contactPhone = typedPhone ? normalizeKenyanPhone(typedPhone) : normalizeKenyanPhone(metadata.phone);
+    if (!contactPhone) {
+      return NextResponse.json({
+        success: false,
+        message: "Add a valid Kenyan phone number buyers can call, e.g. 0712 345 678.",
+      }, { status: 400 });
+    }
+    const contactName = String(body.contactName || metadata.name || "").trim().slice(0, 100) || null;
+
     const { error: profileError } = await supabaseAdmin.from("users").upsert({
       id: user.id,
       phone: metadata.phone || null,
@@ -48,7 +64,7 @@ export async function POST(req) {
     const category = ["rent", "sale", "land"].includes(categoryInput) ? categoryInput : "rent";
     const amenities = Array.isArray(body.amenities) ? body.amenities.map(String).slice(0, 20) : [];
 
-    const { data: newProperty, error: propError } = await supabaseAdmin.from("properties").insert({
+    const row = {
       owner_id: user.id,
       title: title.slice(0, 200),
       description: [body.description, body.moredetails].filter(Boolean).map(String).join("\n\n"),
@@ -63,7 +79,16 @@ export async function POST(req) {
       status: "active",
       verification_status: "pending",
       amenities,
-    }).select().single();
+    };
+
+    let { data: newProperty, error: propError } = await supabaseAdmin
+      .from("properties")
+      .insert({ ...row, contact_phone: contactPhone, contact_name: contactName })
+      .select().single();
+    if (propError && isMissingContactColumn(propError)) {
+      // Migration 20250101000009 not applied yet: still publish; the owner's profile phone is shown instead.
+      ({ data: newProperty, error: propError } = await supabaseAdmin.from("properties").insert(row).select().single());
+    }
     if (propError) throw propError;
 
     const { error: imageError } = await supabaseAdmin

@@ -1,43 +1,66 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import Link from "next/link";
-import { Heart, Bed, Bath, Square } from "lucide-react";
-import Image from "next/image";
+import { toast } from "react-toastify";
+import { Bed, Bath, ExternalLink, Pencil, Phone, Plus, Trash2 } from "lucide-react";
+import Navbar from "../components/Navbar";
 import Loading from "../components/Loading";
+import { authHeaders, redirectIfUnauthorized } from "../utils/session";
+import { formatPhoneDisplay } from "../utils/phone";
+
+const fallbackImage = "https://images.unsplash.com/photo-1505691723518-36a5ac3be353?q=80";
 
 export default function MyProperties() {
     const [properties, setProperties] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    const fallbackImage =
-        "https://images.unsplash.com/photo-1505691723518-36a5ac3be353?q=80";
-
-    const getMyProperties = async () => {
-        try {
-            const res = await fetch(`/api/property/myproperties`, {
-                method: "GET",
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-                cache: "no-store",
-            });
-
-            const data = await res.json();
-            setProperties(data.properties || []);
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const [deletingId, setDeletingId] = useState(null);
 
     useEffect(() => {
         if (!localStorage.getItem("token")) {
             window.location.replace("/login?next=/myProperties");
             return;
         }
-        getMyProperties();
+        (async () => {
+            try {
+                const res = await fetch(`/api/property/myproperties`, {
+                    method: "GET",
+                    headers: authHeaders(),
+                    cache: "no-store",
+                });
+                if (redirectIfUnauthorized(res, "/myProperties")) return;
+                const data = await res.json();
+                setProperties(data.properties || []);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
+        })();
     }, []);
+
+    async function deleteProperty(property) {
+        if (!window.confirm(`Delete "${property.title}"? This permanently removes the listing and its photos.`)) return;
+        setDeletingId(property._id);
+        try {
+            const res = await fetch(`/api/property/deleteProperty?pid=${property._id}`, {
+                method: "DELETE",
+                headers: authHeaders(),
+            });
+            if (redirectIfUnauthorized(res, "/myProperties")) return;
+            const out = await res.json();
+            if (out.success) {
+                setProperties((list) => list.filter((p) => p._id !== property._id));
+                toast.success("Listing deleted.");
+            } else {
+                toast.error(out.message || "Could not delete the listing.");
+            }
+        } catch {
+            toast.error("We couldn't reach the server. Try again.");
+        } finally {
+            setDeletingId(null);
+        }
+    }
 
     return (
         <div className="w-full bg-white relative overflow-hidden">
@@ -50,13 +73,19 @@ export default function MyProperties() {
             <hr className="bg-gray-300" />
 
             {/* PAGE TITLE */}
-            <div className="text-center mt-20 mb-10">
+            <div className="text-center mt-20 mb-10 px-6">
                 <h1 className="text-[clamp(2rem,4vw,3rem)] font-bold font-bricolage text-[#102A23]">
-                    Explore Our Properties
+                    My Listings
                 </h1>
                 <p className="text-gray-600 mt-2 font-bricolage font-semibold">
-                    Find the perfect place that matches your lifestyle.
+                    Edit, hide or delete the properties you have listed.
                 </p>
+                <Link
+                    href="/addProperty"
+                    className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#1E7F4B] px-5 py-3 text-sm font-bold text-white hover:bg-[#18683d]"
+                >
+                    <Plus className="h-4 w-4" /> List a property
+                </Link>
             </div>
 
             {/* PROPERTY GRID */}
@@ -65,29 +94,26 @@ export default function MyProperties() {
                   <Loading />
                 ) : properties.length === 0 ? (
                     <p className="text-center text-gray-600">
-                        No properties found
+                        You haven&apos;t listed anything yet.
                     </p>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
                         {properties.map((p) => (
-                            <Link
+                            <div
                                 key={p._id}
-                                href={`myProperties/${p._id}`}
-                                className="rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-200 hover:shadow-2xl transition-all duration-300 group"
+                                className="rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-200 flex flex-col"
                             >
-                                <div className="relative">
-
-
-
+                                <Link href={`/myProperties/${p._id}`} className="relative block">
+                                    {/* eslint-disable-next-line @next/next/no-img-element -- remote Cloudinary photo */}
                                     <img
                                         src={p.images?.[0] || fallbackImage}
                                         alt={p.title}
-                                        className="w-full h-56 object-cover group-hover:scale-105 transition-all duration-300"
+                                        className="w-full h-56 object-cover"
                                     />
-                                </div>
+                                </Link>
 
                                 {/* CARD CONTENT */}
-                                <div className="p-5 font-bricolage">
+                                <div className="p-5 font-bricolage flex-1 flex flex-col">
                                     <h2 className="text-xl font-semibold text-[#12342A]">
                                         {p.title}
                                     </h2>
@@ -98,35 +124,63 @@ export default function MyProperties() {
 
                                     {/* PRICE */}
                                     <div className="mt-4 text-lg font-bold text-[#1B8C66]">
-                                        ₹ {p.price.toLocaleString()}
+                                        KES {p.price.toLocaleString()}{p.category === "rent" ? " / month" : ""}
                                     </div>
 
                                     {/* FEATURES */}
-                                    <div className="flex justify-between mt-4 text-gray-700 text-sm">
-                                        <span className="flex gap-1 items-center"><Bed size={16} /> {p.bedrooms} Beds</span>
-                                        <span className="flex gap-1 items-center"><Bath size={16} /> {p.bathrooms} Baths</span>
-                                        <span className="flex gap-1 items-center"><Square size={16} /> {p.areaSqFt} sqft</span>
-                                    </div>
+                                    {(p.bedrooms > 0 || p.bathrooms > 0) && (
+                                        <div className="flex gap-5 mt-4 text-gray-700 text-sm">
+                                            {p.bedrooms > 0 && <span className="flex gap-1 items-center"><Bed size={16} /> {p.bedrooms} Beds</span>}
+                                            {p.bathrooms > 0 && <span className="flex gap-1 items-center"><Bath size={16} /> {p.bathrooms} Baths</span>}
+                                        </div>
+                                    )}
 
-                                    {/* AGENT */}
-                                    <div className="mt-4 text-sm text-gray-600">
-                                        Agent:{" "}
-                                        <span className="font-semibold">
-                                            {p.Agent?.name || "Unknown"}
+                                    {/* CONTACT BUYERS SEE */}
+                                    {p.contact?.direct && (
+                                        <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
+                                            <Phone size={14} /> Buyers call {formatPhoneDisplay(p.contact.phone)}
+                                        </div>
+                                    )}
+
+                                    {/* STATUS BADGES */}
+                                    <div className="mt-4 flex flex-wrap gap-2">
+                                        <span
+                                            className={`px-3 py-1 rounded-full text-sm font-medium ${p.status === "available"
+                                                ? "bg-green-100 text-green-700"
+                                                : "bg-gray-200 text-gray-700"
+                                                }`}
+                                        >
+                                            {p.status === "available" ? "Live" : p.status}
                                         </span>
+                                        {p.verificationStatus === "verified" && (
+                                            <span className="px-3 py-1 rounded-full text-sm font-medium bg-emerald-100 text-emerald-700">Verified</span>
+                                        )}
                                     </div>
 
-                                    {/* STATUS BADGE */}
-                                    <span
-                                        className={`inline-block mt-4 px-3 py-1 rounded-full text-sm font-medium ${p.status?.toLowerCase() === "sold"
-                                            ? "bg-red-100 text-red-600"
-                                            : "bg-green-100 text-green-700"
-                                            }`}
-                                    >
-                                        {p.status}
-                                    </span>
+                                    {/* ACTIONS */}
+                                    <div className="mt-5 flex flex-wrap gap-2 pt-4 border-t border-gray-100">
+                                        <Link
+                                            href={`/properties/${p._id}`}
+                                            className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                                        >
+                                            <ExternalLink size={14} /> View
+                                        </Link>
+                                        <Link
+                                            href={`/myProperties/${p._id}/updateanddelete`}
+                                            className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                                        >
+                                            <Pencil size={14} /> Edit
+                                        </Link>
+                                        <button
+                                            onClick={() => deleteProperty(p)}
+                                            disabled={deletingId === p._id}
+                                            className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
+                                        >
+                                            <Trash2 size={14} /> {deletingId === p._id ? "Deleting…" : "Delete"}
+                                        </button>
+                                    </div>
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                     </div>
                 )}

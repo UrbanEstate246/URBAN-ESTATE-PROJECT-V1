@@ -7,11 +7,12 @@ import ImageGallery from "@/app/components/ImageGallery";
 import {
     Bed,
     Bath,
-    Square,
     MapPin,
+    Phone,
 } from "lucide-react";
 import Link from "next/link";
 import Loading from "@/app/components/Loading";
+import { formatPhoneDisplay } from "@/app/utils/phone";
 
 export default function MyPropertyDetails() {
     const { propertyid } = useParams();
@@ -42,6 +43,33 @@ export default function MyPropertyDetails() {
         return (
             <Loading />
         );
+
+    const price = property
+        ? `KES ${property.price.toLocaleString()}${property.category === "rent" ? " / month" : ""}`
+        : "";
+
+    const details = property && (
+        <>
+            {property.bedrooms > 0 && (
+                <span className="flex gap-2 items-center">
+                    <Bed size={20} /> {property.bedrooms} Bedrooms
+                </span>
+            )}
+            {property.bathrooms > 0 && (
+                <span className="flex gap-2 items-center">
+                    <Bath size={20} /> {property.bathrooms} Bathrooms
+                </span>
+            )}
+            <span className="flex gap-2 items-center">
+                <MapPin size={20} /> {property.address}
+            </span>
+            {property.contact?.direct && (
+                <span className="flex gap-2 items-center">
+                    <Phone size={20} /> Buyers call {formatPhoneDisplay(property.contact.phone)}
+                </span>
+            )}
+        </>
+    );
 
     return (
         <div className="bg-white min-h-screen">
@@ -76,30 +104,19 @@ export default function MyPropertyDetails() {
 
                             {/* Price */}
                             <div className="text-3xl font-bold text-green-700">
-                                ₹ {property.price.toLocaleString()}
+                                {price}
                             </div>
 
                             {/* Features */}
-                            <div className="grid grid-cols-2 gap-4 text-gray-700">
-                                <span className="flex gap-2 items-center">
-                                    <Bed size={20} /> {property.bedrooms} Bedrooms
-                                </span>
-                                <span className="flex gap-2 items-center">
-                                    <Bath size={20} /> {property.bathrooms} Bathrooms
-                                </span>
-                                <span className="flex gap-2 items-center">
-                                    <Square size={20} /> {property.areaSqFt} sq.ft
-                                </span>
-                                <span className="flex gap-2 items-center">
-                                    <MapPin size={20} /> {property.address}
-                                </span>
+                            <div className="grid grid-cols-1 gap-4 text-gray-700">
+                                {details}
                             </div>
 
                             {/* UPDATE / DELETE BUTTON */}
                             <div className="mt-6">
                                 <Link href={`/myProperties/${propertyid}/updateanddelete`}>
                                     <button className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                                        Update / Delete
+                                        Edit / Delete
                                     </button>
                                 </Link>
                             </div>
@@ -113,22 +130,11 @@ export default function MyPropertyDetails() {
                         <div className="mt-6 space-y-4">
 
                             <div className="text-2xl font-bold text-green-700">
-                                ₹ {property.price.toLocaleString()}
+                                {price}
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4 text-gray-700">
-                                <span className="flex gap-2 items-center">
-                                    <Bed size={18} /> {property.bedrooms} Beds
-                                </span>
-                                <span className="flex gap-2 items-center">
-                                    <Bath size={18} /> {property.bathrooms} Baths
-                                </span>
-                                <span className="flex gap-2 items-center">
-                                    <Square size={18} /> {property.areaSqFt} sq.ft
-                                </span>
-                                <span className="flex gap-2 items-center">
-                                    <MapPin size={18} /> {property.address}
-                                </span>
+                            <div className="grid grid-cols-1 gap-4 text-gray-700">
+                                {details}
                             </div>
 
                             {/* UPDATE / DELETE BUTTON */}
@@ -136,7 +142,7 @@ export default function MyPropertyDetails() {
                                 onClick={() => (window.location.href = `/myProperties/${propertyid}/updateanddelete`)}
                                 className="w-full mt-4 bg-blue-600 text-white py-3 rounded-lg shadow hover:bg-blue-700"
                             >
-                                Update / Delete
+                                Edit / Delete
                             </button>
                         </div>
                     </div>
@@ -146,22 +152,10 @@ export default function MyPropertyDetails() {
                         <h2 className="text-2xl font-bold text-[#102A23] mb-2">
                             Description
                         </h2>
-                        <p className="text-gray-700 leading-relaxed">
+                        <p className="text-gray-700 leading-relaxed whitespace-pre-line">
                             {property.description}
                         </p>
                     </div>
-
-                    {/* MORE DETAILS */}
-                    {property.moredetails && (
-                        <div className="mt-10">
-                            <h2 className="text-2xl font-bold text-[#102A23] mb-2">
-                                More Details
-                            </h2>
-                            <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                                {property.moredetails}
-                            </p>
-                        </div>
-                    )}
                 </div>
             )}
         </div>

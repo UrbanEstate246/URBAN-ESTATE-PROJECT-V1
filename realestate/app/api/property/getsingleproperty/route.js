@@ -31,7 +31,7 @@ export async function GET(req) {
             }, { status: 404 });
         }
 
-        const formatted = formatProperty(p);
+        const formatted = formatProperty(p, { includeContact: true });
 
         return NextResponse.json({
             success: true,

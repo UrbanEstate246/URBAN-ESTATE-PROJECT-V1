@@ -30,7 +30,7 @@ export async function GET(req) {
             );
         }
 
-        const formatted = (properties || []).map(formatProperty);
+        const formatted = (properties || []).map((p) => formatProperty(p, { includeContact: true }));
 
         return NextResponse.json(
             { success: true, properties: formatted },

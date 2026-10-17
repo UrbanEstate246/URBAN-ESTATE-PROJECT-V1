@@ -1,0 +1,25 @@
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    # Runs every 3 days at 06:00 UTC to prevent Supabase free tier inactivity pause
+    - cron: "0 6 */3 * *"
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        run: |
+          echo "Pinging Supabase to maintain database activity..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhudGllYXdjb2Jwc2RhcHNzcHduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0MDc0NTQsImV4cCI6MjEwNTk4MzQ1NH0.l3GoRO2P615pO24nyhxZnQyASMTKpnld1Mx09CzHzOw" \
+            "https://xntieawcobpsdapsspwn.supabase.co/rest/v1/properties?select=id&limit=1")
+          
+          echo "Supabase response code: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" -eq 200 ] || [ "$HTTP_STATUS" -eq 206 ]; then
+            echo "✓ Supabase is online and active. Inactivity timer reset."
+          else
+            echo "⚠ Unexpected HTTP status: $HTTP_STATUS"
+          fi

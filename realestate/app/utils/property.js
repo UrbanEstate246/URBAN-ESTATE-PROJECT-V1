@@ -8,9 +8,14 @@ const PLACEHOLDER = "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?a
  * is only the last resort for old listings that have no phone number at all.
  */
 function contactFor(p) {
-  const phone = normalizeKenyanPhone(p.contact_phone) || normalizeKenyanPhone(p.owner?.phone);
-  if (phone) return { name: p.contact_name || "Property owner", phone, direct: true };
-  return { name: "UrbanEstate support", phone: normalizeKenyanPhone(BRAND.phone), email: BRAND.email, direct: false };
+  const rawPhone = p.contact_phone || p.owner?.phone;
+  const phone = normalizeKenyanPhone(rawPhone);
+  // Fall back to Ann (UrbanEstate Verified Agent) if phone is missing or dummy 0700000000
+  if (phone && !phone.endsWith("700000000")) {
+    const name = p.contact_name || (p.owner?.name && !p.owner.name.includes("Super Admin") ? p.owner.name : "Ann (UrbanEstate Verified Agent)");
+    return { name, phone, direct: true };
+  }
+  return { name: "Ann (UrbanEstate Verified Agent)", phone: normalizeKenyanPhone(BRAND.phone), email: BRAND.email, direct: true };
 }
 
 // Phone numbers are only attached when `includeContact` is set (single listing, my listings, admin)
@@ -26,7 +31,7 @@ export function formatProperty(p, { includeContact = false } = {}) {
     ownerId: p.owner_id,
     title: p.title,
     description: p.description,
-    moredetails: p.description,
+    moredetails: p.moredetails && p.moredetails !== p.description ? p.moredetails : null,
     price: Number(p.price),
     category: p.category,
     type: p.type || "",
@@ -39,7 +44,7 @@ export function formatProperty(p, { includeContact = false } = {}) {
     bedrooms: p.bedrooms || null,
     bathrooms: p.bathrooms || null,
     areaSqFt: null,
-    amenities: p.amenities || [],
+    amenities: Array.isArray(p.amenities) ? p.amenities : [],
     images: images.length ? images : [PLACEHOLDER],
     ...(includeContact ? { contact: contactFor(p) } : {}),
   };

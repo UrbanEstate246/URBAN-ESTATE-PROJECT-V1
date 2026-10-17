@@ -1,34 +1,24 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import Image from "next/image";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 
 export default function PropertyGallery({ images = [] }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [fade, setFade] = useState(true);
-    const [isUserClicked, setIsUserClicked] = useState(false);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalIndex, setModalIndex] = useState(0);
 
-    // AUTO NEXT SLIDE
     const triggerNext = useCallback(() => {
         setFade(false);
         setTimeout(() => {
             setCurrentIndex((prev) => (prev + 1) % images.length);
             setFade(true);
-        }, 200);
+        }, 150);
     }, [images.length]);
 
-    // AUTO PLAY STOP ON CLICK
-    useEffect(() => {
-        if (isUserClicked) return;
-        const interval = setInterval(triggerNext, 3000);
-        return () => clearInterval(interval);
-    }, [triggerNext, isUserClicked]);
-
-    // PREV SLIDE
     const triggerPrev = useCallback(() => {
         setFade(false);
         setTimeout(() => {
@@ -36,10 +26,9 @@ export default function PropertyGallery({ images = [] }) {
                 prev === 0 ? images.length - 1 : prev - 1
             );
             setFade(true);
-        }, 200);
+        }, 150);
     }, [images.length]);
 
-    // MODAL
     const openModal = (i) => {
         setModalIndex(i);
         setIsModalOpen(true);
@@ -53,12 +42,11 @@ export default function PropertyGallery({ images = [] }) {
     const modalPrev = () =>
         setModalIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
 
-    // TOUCH SWIPE
+    // Touch swipe for mobile
     const startXRef = useRef(0);
 
     const onTouchStart = (e) => {
         startXRef.current = e.touches[0].clientX;
-        setIsUserClicked(true);
     };
 
     const onTouchEnd = (e) => {
@@ -67,132 +55,175 @@ export default function PropertyGallery({ images = [] }) {
         if (endX - startXRef.current > 50) triggerPrev();
     };
 
+    if (!images || images.length === 0) return null;
+
     return (
-        <div className="w-full flex gap-4">
+        <div className="w-full flex flex-col md:flex-row gap-4">
+            {/* THUMBNAILS (DESKTOP) */}
+            {images.length > 1 && (
+                <div className="hidden md:flex flex-col gap-3 w-28 overflow-y-auto max-h-[460px] pr-1 scrollbar-thin">
+                    {images.map((img, index) => (
+                        <button
+                            key={index}
+                            type="button"
+                            onClick={() => setCurrentIndex(index)}
+                            className={`relative cursor-pointer rounded-xl overflow-hidden border-2 transition-all shrink-0 h-24 w-full
+                                ${currentIndex === index ? "border-[#1E7F4B] ring-2 ring-[#1E7F4B]/30 shadow-md" : "border-transparent opacity-75 hover:opacity-100"}`}
+                        >
+                            <Image
+                                src={img}
+                                fill
+                                alt={`Thumbnail ${index + 1}`}
+                                className="object-cover"
+                                sizes="112px"
+                            />
+                        </button>
+                    ))}
+                </div>
+            )}
 
-            {/* LEFT THUMBNAILS (HIDE ON MOBILE) */}
-            <div className="hidden md:flex flex-col gap-3 w-24 overflow-y-auto max-h-[350px]">
-
-                {images.map((img, index) => (
-                    <div
-                        key={index}
-                        onClick={() => {
-                            setCurrentIndex(index);
-                            setIsUserClicked(true);
-                        }}
-                        className={`cursor-pointer border rounded-lg overflow-hidden 
-                            ${currentIndex === index ? "ring-2 ring-blue-500" : ""}`}
-                    >
-                        <Image
-                            src={img}
-                            width={200}
-                            height={150}
-                            alt={`Thumbnail ${index + 1}`}
-                            className="object-cover w-full h-20"
-                        />
-                    </div>
-                ))}
-            </div>
-
-            {/* MAIN IMAGE */}
+            {/* MAIN IMAGE CONTAINER */}
             <div
-                className={`relative w-full h-[350px] rounded-xl overflow-hidden transition-opacity duration-300 
-                ${fade ? "opacity-100" : "opacity-0"}`}
+                className="relative w-full h-[320px] sm:h-[400px] md:h-[460px] rounded-2xl overflow-hidden bg-gray-100 shadow-sm border border-gray-100 group select-none"
                 onTouchStart={onTouchStart}
                 onTouchEnd={onTouchEnd}
             >
-                <Image
-                    src={images[currentIndex]}
-                    alt="Main image"
-                    fill
-                    className="object-cover cursor-pointer"
+                <div
+                    className={`relative w-full h-full transition-opacity duration-200 cursor-pointer ${fade ? "opacity-100" : "opacity-40"}`}
                     onClick={() => openModal(currentIndex)}
-                />
-
-                {/* Prev */}
-                <button
-                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full text-white"
-                    onClick={() => {
-                        setIsUserClicked(true);
-                        triggerPrev();
-                    }}
                 >
-                    <ChevronLeft size={20} />
-                </button>
+                    <Image
+                        src={images[currentIndex]}
+                        alt={`Property image ${currentIndex + 1}`}
+                        fill
+                        priority
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 800px"
+                    />
+                </div>
 
-                {/* Next */}
-                <button
-                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full text-white"
-                    onClick={() => {
-                        setIsUserClicked(true);
-                        triggerNext();
-                    }}
-                >
-                    <ChevronRight size={20} />
-                </button>
+                {/* PHOTO COUNTER PILL */}
+                <div className="absolute top-4 right-4 bg-black/65 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5 pointer-events-none">
+                    <Maximize2 size={12} />
+                    <span>{currentIndex + 1} / {images.length}</span>
+                </div>
+
+                {/* PREV / NEXT ARROWS */}
+                {images.length > 1 && (
+                    <>
+                        <button
+                            type="button"
+                            aria-label="Previous photo"
+                            className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-[#0B1F33] p-2.5 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 focus:outline-none"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                triggerPrev();
+                            }}
+                        >
+                            <ChevronLeft size={20} />
+                        </button>
+
+                        <button
+                            type="button"
+                            aria-label="Next photo"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-[#0B1F33] p-2.5 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 focus:outline-none"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                triggerNext();
+                            }}
+                        >
+                            <ChevronRight size={20} />
+                        </button>
+                    </>
+                )}
+
+                {/* MOBILE THUMB DOTS */}
+                {images.length > 1 && (
+                    <div className="md:hidden absolute bottom-3 inset-x-0 flex justify-center gap-1.5 pointer-events-none">
+                        {images.map((_, i) => (
+                            <div
+                                key={i}
+                                className={`h-1.5 rounded-full transition-all ${currentIndex === i ? "w-5 bg-white" : "w-1.5 bg-white/50"}`}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
 
-            {/* ───────────── MODAL ───────────── */}
+            {/* FULLSCREEN LIGHTBOX MODAL */}
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black/95 z-[999] flex flex-col items-center justify-between p-4 md:p-6 backdrop-blur-md">
+                    {/* TOP BAR */}
+                    <div className="w-full flex items-center justify-between text-white max-w-6xl pt-2">
+                        <span className="text-sm font-medium tracking-wide">
+                            Photo {modalIndex + 1} of {images.length}
+                        </span>
+                        <button
+                            type="button"
+                            onClick={closeModal}
+                            className="text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition"
+                            aria-label="Close fullscreen"
+                        >
+                            <X size={28} />
+                        </button>
+                    </div>
 
-                    {/* CLOSE BUTTON */}
-                    <button
-                        onClick={closeModal}
-                        className="absolute top-5 right-5 text-white p-2"
-                    >
-                        <X size={32} />
-                    </button>
-
-                    {/* MAIN MODAL CONTAINER */}
-                    <div className="flex flex-col items-center w-full max-w-4xl">
-
-                        {/* BIG IMAGE */}
-                        <div className="relative w-full h-[60vh] rounded-xl overflow-hidden">
+                    {/* MAIN LIGHTBOX IMAGE */}
+                    <div className="relative w-full max-w-5xl h-[65vh] md:h-[75vh] flex items-center justify-center">
+                        <div className="relative w-full h-full">
                             <Image
                                 src={images[modalIndex]}
-                                alt="Zoomed image"
+                                alt={`Fullscreen property image ${modalIndex + 1}`}
                                 fill
-                                className="object-cover"
+                                className="object-contain"
+                                sizes="1200px"
                             />
-
-                            {/* Prev */}
-                            <button
-                                className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full text-white"
-                                onClick={modalPrev}
-                            >
-                                <ChevronLeft size={28} />
-                            </button>
-
-                            {/* Next */}
-                            <button
-                                className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 p-3 rounded-full text-white"
-                            >
-                                <ChevronRight size={28} />
-                            </button>
                         </div>
 
-                        {/* BOTTOM THUMBNAILS */}
-                        <div className="flex gap-3 mt-4 overflow-x-auto p-2 w-full justify-center">
+                        {images.length > 1 && (
+                            <>
+                                <button
+                                    type="button"
+                                    className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full backdrop-blur-sm transition"
+                                    onClick={modalPrev}
+                                    aria-label="Previous image"
+                                >
+                                    <ChevronLeft size={28} />
+                                </button>
+                                <button
+                                    type="button"
+                                    className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full backdrop-blur-sm transition"
+                                    onClick={modalNext}
+                                    aria-label="Next image"
+                                >
+                                    <ChevronRight size={28} />
+                                </button>
+                            </>
+                        )}
+                    </div>
+
+                    {/* BOTTOM THUMBNAILS STRIP */}
+                    {images.length > 1 && (
+                        <div className="flex gap-2.5 overflow-x-auto py-2 w-full max-w-4xl justify-center">
                             {images.map((img, i) => (
-                                <div
+                                <button
                                     key={i}
+                                    type="button"
                                     onClick={() => setModalIndex(i)}
-                                    className={`cursor-pointer border rounded-xl overflow-hidden 
-                                    min-w-[80px] h-20
-                                    ${modalIndex === i ? "ring-2 ring-blue-500" : ""}`}
+                                    className={`relative cursor-pointer rounded-lg overflow-hidden shrink-0 w-16 h-12 md:w-20 md:h-14 border-2 transition-all
+                                        ${modalIndex === i ? "border-[#1E7F4B] scale-105" : "border-transparent opacity-60 hover:opacity-100"}`}
                                 >
                                     <Image
                                         src={img}
-                                        width={100}
-                                        height={70}
-                                        alt={`Preview ${i}`}
-                                        className="object-cover w-full h-full"
+                                        fill
+                                        alt={`Modal preview ${i + 1}`}
+                                        className="object-cover"
+                                        sizes="80px"
                                     />
-                                </div>
+                                </button>
                             ))}
                         </div>
-                    </div>
+                    )}
                 </div>
             )}
         </div>
